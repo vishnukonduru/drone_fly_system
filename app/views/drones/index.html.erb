@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Drones</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="7"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @drones.order(:name).each do |drone| %>
+      <tr>
+        <td><%=drone.name%></td>
+        <td><%= link_to 'Status', drone %></td>
+        <td><%= link_to 'Edit', edit_drone_path(drone) %></td>
+        <td><%= link_to 'Destroy', drone, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+        <td>
+          <% if drone.status == 'off' %>
+            <%= link_to 'Take OFF', take_off_drone_path(drone), method: :post%>
+          <% end %>
+        </td>
+        <td>
+          <% if drone.status != 'off' %>
+            <%= link_to 'Land', land_drone_path(drone), method: :post%>
+          <% end %>
+        </td>
+
+        <td>
+          <% if drone.status == 'off' %>
+            <p>Drone is not take off yet</p>
+          <% else %>
+              <%= form_with model: @drone, url: move_drone_path(drone), :method => :post, remote: false do |form| %>
+                <div class='form-control'>
+                  <%= form.label :position %>
+                  <%= select_tag :position, options_for_select(Drone.positions.keys) %>
+                </div>
+              
+                <div class="actions">
+                  <%= form.submit 'Move' %>
+                </div>
+              <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Drone', new_drone_path %>

@@ -1,0 +1,23 @@
+<%= form_with(model: drone) do |form| %>
+  
+  <div class="form-group">
+    <%= form.label :name %>
+    <%= form.text_field :name, autofocus: true, autocomplete: 'name', class: 'form-control' %>
+  </div>
+
+  <% if drone.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(drone.errors.count, "error") %> prohibited this drone from being saved:</h2>
+
+      <ul>
+        <% drone.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
